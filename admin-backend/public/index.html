@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>find.tn | Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --primary: #6366f1;
+            --accent: #818cf8;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        h1 span {
+            color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: var(--accent);
+        }
+
+        .product-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-info h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .delete-btn {
+            width: auto;
+            padding: 0.5rem;
+            background: #ef4444;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>find.tn <span>Admin</span></h1>
+        <div class="grid">
+            <div class="card">
+                <h2>Add Product</h2>
+                <form id="productForm">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="description" rows="3" required></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Price (DT)</label>
+                            <input type="number" id="price" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Old Price (DT)</label>
+                            <input type="number" id="oldPrice">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="category" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URLs (comma separated)</label>
+                        <input type="text" id="imageUrl" required
+                            placeholder="https://site.com/img1.jpg, https://site.com/img2.jpg">
+                    </div>
+                    <button type="submit">Publish Product</button>
+                </form>
+            </div>
+            <div class="card">
+                <h2>Live Inventory</h2>
+                <div id="productList" class="product-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check for saved API URL or default to local
+        const getApiUrl = () => localStorage.getItem('api_url') || 'http://localhost:5000/api/products';
+        let API_URL = getApiUrl();
+
+        async function fetchProducts() {
+            try {
+                const res = await fetch(API_URL);
+                if (!res.ok) throw new Error('Failed to connect');
+                const products = await res.json();
+                const list = document.getElementById('productList');
+                list.innerHTML = products.map(p => `
+                  <div class="item">
+                      <img src="${p.images[0]}" alt="">
+                      <div class="item-info">
+                          <h3>${p.name}</h3>
+                          <small>${p.price} DT</small>
+                      </div>
+                      <button class="delete-btn" onclick="deleteProduct(${p.id})">Delete</button>
+                  </div>
+              `).join('');
+            } catch (error) {
+                document.getElementById('productList').innerHTML = `<p style="color: red; padding: 1rem;">Error: Could not connect to Backend at <b>${API_URL}</b>.<br>Check if it's running or update settings.</p>`;
+            }
+        }
+
+        // Add Configuration UI
+        const configDiv = document.createElement('div');
+        configDiv.style.marginBottom = '20px';
+        configDiv.innerHTML = `
+          <div class="card" style="padding: 1rem; margin-bottom: 2rem; background: #334155;">
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <label style="margin:0; min-width: 100px;">Backend URL:</label>
+              <input type="text" id="apiUrlInput" value="${API_URL.replace('/api/products', '')}" style="margin:0;">
+              <button onclick="saveConfig()" style="width: auto;">Save & Connect</button>
+            </div>
+            <small style="opacity: 0.7; margin-top: 5px; display: block;">Enter your Render URL here (e.g. https://your-app.onrender.com) or http://localhost:5000</small>
+          </div>
+        `;
+        document.querySelector('.container').insertBefore(configDiv, document.querySelector('.grid'));
+
+        function saveConfig() {
+            let url = document.getElementById('apiUrlInput').value.replace(/\/$/, ''); // Remove trailing slash
+            if (!url.includes('/api/products')) url += '/api/products';
+            localStorage.setItem('api_url', url);
+            API_URL = url;
+            fetchProducts();
+            alert('Backend URL updated to: ' + url);
+        }
+
+        document.getElementById('productForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const product = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                price: parseFloat(document.getElementById('price').value),
+                oldPrice: document.getElementById('oldPrice').value ? parseFloat(document.getElementById('oldPrice').value) : null,
+                category: document.getElementById('category').value,
+                images: document.getElementById('imageUrl').value.split(',').map(url => url.trim()).filter(url => url),
+                featured: true
+            };
+
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(product)
+            });
+
+            e.target.reset();
+            fetchProducts();
+        };
+
+        async function deleteProduct(id) {
+            if (confirm('Are you sure?')) {
+                await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                fetchProducts();
+            }
+        }
+
+        fetchProducts();
+    </script>
+</body>
+
+</html>

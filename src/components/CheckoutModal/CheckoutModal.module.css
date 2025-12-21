@@ -1,0 +1,151 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+}
+
+.modal {
+    width: 100%;
+    max-width: 500px;
+    background: var(--bg-primary);
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.closeBtn {
+    font-size: 2rem;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+
+.closeBtn:hover {
+    color: var(--error);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.inputGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.inputGroup input,
+.inputGroup textarea {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 0.5rem;
+}
+
+.summary strong {
+    font-size: 1.5rem;
+    color: var(--accent-primary);
+}
+
+.btnPrimary {
+    padding: 1rem;
+    background: var(--accent-primary);
+    color: white;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.btnPrimary:hover {
+    background: var(--accent-hover);
+}
+
+.btnPrimary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.successView {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.orderId {
+    font-family: monospace;
+    font-size: 1.5rem;
+    background: var(--bg-tertiary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    color: var(--accent-primary);
+    letter-spacing: 1px;
+}
+
+.muted {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}

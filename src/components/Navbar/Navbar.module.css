@@ -1,0 +1,74 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+
+.logo span {
+    color: var(--accent-primary);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.themeToggle,
+.cartLink {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.themeToggle:hover,
+.cartLink:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+}
+
+.cartBadge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--accent-primary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--bg-primary);
+}

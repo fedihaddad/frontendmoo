@@ -9,7 +9,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/products';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backendmoo.onrender.com/api/products';
     fetch(API_URL)
       .then(res => res.json())
       .then(data => setProducts(data))

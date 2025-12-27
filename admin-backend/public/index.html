@@ -5,16 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>find.tn | Admin Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    <link rel="icon"
+        href="data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
         rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.435.0/dist/umd/lucide.js"></script>
     <style>
         :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #f8fafc;
+            --bg: #0b0f19;
+            --card: #161e2e;
+            --card-hover: #1f2937;
+            --text: #f3f4f6;
+            --text-dim: #9ca3af;
             --primary: #6366f1;
+            --primary-hover: #4f46e5;
             --accent: #818cf8;
-            --border: #334155;
+            --border: rgba(255, 255, 255, 0.1);
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease-in-out;
         }
 
         body {
@@ -22,79 +35,133 @@
             background: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 2rem;
+            padding: 1.5rem;
+            line-height: 1.5;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding: 0 0.5rem;
+        }
+
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -0.025em;
         }
 
         h1 span {
-            color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 1fr;
             gap: 2rem;
         }
 
         .card {
             background: var(--card);
             padding: 2rem;
-            border-radius: 20px;
+            border-radius: 24px;
             border: 1px solid var(--border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            opacity: 0.8;
+            font-size: 0.875rem;
+            color: var(--text-dim);
         }
 
         input,
         textarea,
         select {
             width: 100%;
-            padding: 0.8rem;
-            background: var(--bg);
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-family: inherit;
+            font-size: 0.9375rem;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
         button {
             width: 100%;
-            padding: 1rem;
+            padding: 0.875rem;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            background: var(--accent);
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
 
         .product-list {
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .product-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .product-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
         }
 
         .item {
@@ -102,17 +169,23 @@
             align-items: center;
             gap: 1rem;
             padding: 1rem;
-            background: var(--bg);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 18px;
             margin-bottom: 1rem;
             border: 1px solid var(--border);
         }
 
+        .item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
         .item img {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
             object-fit: cover;
+            background: #000;
         }
 
         .item-info {
@@ -122,65 +195,165 @@
         .item-info h3 {
             margin: 0;
             font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-info small {
+            display: block;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
         }
 
         .delete-btn {
-            width: auto;
-            padding: 0.5rem;
-            background: #ef4444;
-            font-size: 0.8rem;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .edit-btn {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .item {
+                padding: 0.75rem;
+            }
+
+            .item img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .item-info h3 {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>find.tn <span>Admin</span></h1>
+        <header>
+            <h1>find.tn <span>Admin</span></h1>
+            <div class="status-badge"
+                style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 0.5rem 1rem; border-radius: 99px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+                Secure Access
+            </div>
+        </header>
+
         <div class="grid">
             <div class="card">
-                <h2>Add Product</h2>
+                <h2><i data-lucide="plus-circle"></i> Add Product</h2>
                 <form id="productForm">
                     <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" id="name" required>
+                        <label>Product Name</label>
+                        <input type="text" id="name" required placeholder="e.g. Wireless Headset">
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea id="description" rows="3" required></textarea>
+                        <textarea id="description" rows="3" required
+                            placeholder="Tell more about this product..."></textarea>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label>Price (DT)</label>
-                            <input type="number" id="price" required>
+                            <input type="number" id="price" required placeholder="0.00">
                         </div>
                         <div class="form-group">
                             <label>Old Price (DT)</label>
-                            <input type="number" id="oldPrice">
+                            <input type="number" id="oldPrice" placeholder="Optional">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Category</label>
-                        <input type="text" id="category" required>
+                        <input type="text" id="category" required placeholder="e.g. Electronics">
                     </div>
                     <div class="form-group">
                         <label>Image URLs (comma separated)</label>
                         <input type="text" id="imageUrl" required
                             placeholder="https://site.com/img1.jpg, https://site.com/img2.jpg">
                     </div>
-                    <button type="submit">Publish Product</button>
+                    <button type="submit">
+                        <i data-lucide="send"></i>
+                        <span>Publish Product</span>
+                    </button>
                 </form>
             </div>
             <div class="card">
-                <h2>Live Inventory</h2>
+                <h2><i data-lucide="box"></i> Live Inventory</h2>
                 <div id="productList" class="product-list"></div>
             </div>
         </div>
     </div>
 
     <script>
+        // Initialize Lucide icons
+        const initIcons = () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            } else {
+                console.warn('Lucide icons not loaded yet.');
+            }
+        };
+
         // Check for saved API URL or default to local
-        const getApiUrl = () => localStorage.getItem('api_url') || 'http://localhost:5000/api/products';
-        let API_URL = getApiUrl();
+        const getBaseUrl = () => localStorage.getItem('api_url') || 'http://localhost:5000';
+        let BASE_URL = getBaseUrl().replace('/api/products', '');
+        let API_URL = `${BASE_URL}/api/products`;
+
+        let editingProductId = null;
 
         async function fetchProducts() {
             try {
@@ -188,43 +361,121 @@
                 if (!res.ok) throw new Error('Failed to connect');
                 const products = await res.json();
                 const list = document.getElementById('productList');
-                list.innerHTML = products.map(p => `
-                  <div class="item">
-                      <img src="${p.images[0]}" alt="">
-                      <div class="item-info">
-                          <h3>${p.name}</h3>
-                          <small>${p.price} DT</small>
+                if (products.length === 0) {
+                    list.innerHTML = `<div style="text-align: center; padding: 3rem; color: var(--text-dim); opacity: 0.5;">
+                        <i data-lucide="inbox" style="width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+                        <p>No products found</p>
+                    </div>`;
+                } else {
+                    list.innerHTML = products.map(p => `
+                      <div class="item" id="item-${p._id}">
+                          <img src="${(p.images && p.images[0]) ? p.images[0] : ''}" alt="" onerror="this.src='https://placehold.co/600x400/161e2e/f3f4f6?text=No+Image'">
+                          <div class="item-info">
+                              <h3>${p.name || 'Unnamed Product'}</h3>
+                              <small>${p.price || 0} DT</small>
+                          </div>
+                          <div class="actions">
+                            <button class="edit-btn" onclick="editProduct('${p._id}')" title="Edit">
+                                <i data-lucide="edit-3" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            <button class="delete-btn" onclick="deleteProduct('${p._id}')" title="Delete">
+                                <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                            </button>
+                          </div>
                       </div>
-                      <button class="delete-btn" onclick="deleteProduct(${p.id})">Delete</button>
-                  </div>
-              `).join('');
+                  `).join('');
+                }
+                initIcons();
             } catch (error) {
-                document.getElementById('productList').innerHTML = `<p style="color: red; padding: 1rem;">Error: Could not connect to Backend at <b>${API_URL}</b>.<br>Check if it's running or update settings.</p>`;
+                document.getElementById('productList').innerHTML = `
+                    <div style="color: var(--danger); padding: 1.5rem; text-align: center; background: rgba(239, 68, 68, 0.05); border-radius: 16px; border: 1px dashed var(--danger);">
+                        <i data-lucide="wifi-off" style="width: 32px; height: 32px; margin-bottom: 1rem;"></i>
+                        <p style="margin: 0; font-weight: 700;">Connection Failed</p>
+                        <small style="display: block; margin-top: 0.5rem; opacity: 0.7;">Could not connect to: <br><b>${API_URL}</b></small>
+                        <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; justify-content: center;">
+                            <button onclick="location.reload()" style="width: auto; padding: 0.5rem 1rem; font-size: 0.8rem; background: var(--border);">Try Again</button>
+                            <button onclick="resetToLocal()" style="width: auto; padding: 0.5rem 1rem; font-size: 0.8rem; background: var(--primary);">Use Localhost</button>
+                        </div>
+                    </div>
+                `;
+                initIcons();
             }
         }
 
-        // Add Configuration UI
+        function resetToLocal() {
+            localStorage.removeItem('api_url');
+            location.reload();
+        }
+
+        // Configuration UI logic
         const configDiv = document.createElement('div');
         configDiv.style.marginBottom = '20px';
         configDiv.innerHTML = `
-          <div class="card" style="padding: 1rem; margin-bottom: 2rem; background: #334155;">
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <label style="margin:0; min-width: 100px;">Backend URL:</label>
-              <input type="text" id="apiUrlInput" value="${API_URL.replace('/api/products', '')}" style="margin:0;">
-              <button onclick="saveConfig()" style="width: auto;">Save & Connect</button>
+          <div class="card" style="padding: 1.25rem; margin-bottom: 2rem; background: rgba(30, 41, 59, 0.5);">
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <label style="margin:0; min-width: 100px;"><i data-lucide="link" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i> Render URL:</label>
+              <input type="text" id="apiUrlInput" value="${BASE_URL}" style="margin:0; flex: 1; min-width: 200px;">
+              <button onclick="saveConfig()" style="width: auto; padding: 0.6rem 1.5rem;">Save & Connect</button>
             </div>
-            <small style="opacity: 0.7; margin-top: 5px; display: block;">Enter your Render URL here (e.g. https://your-app.onrender.com) or http://localhost:5000</small>
+            <small style="opacity: 0.5; margin-top: 8px; display: block; font-size: 0.75rem;">Example: https://your-app.onrender.com</small>
           </div>
         `;
         document.querySelector('.container').insertBefore(configDiv, document.querySelector('.grid'));
 
         function saveConfig() {
-            let url = document.getElementById('apiUrlInput').value.replace(/\/$/, ''); // Remove trailing slash
-            if (!url.includes('/api/products')) url += '/api/products';
+            let url = document.getElementById('apiUrlInput').value.trim().replace(/\/$/, '');
             localStorage.setItem('api_url', url);
-            API_URL = url;
+            BASE_URL = url;
+            API_URL = `${BASE_URL}/api/products`;
             fetchProducts();
             alert('Backend URL updated to: ' + url);
+        }
+
+        async function editProduct(id) {
+            editingProductId = id;
+            try {
+                const res = await fetch(`${API_URL}/${id}`);
+                const p = await res.json();
+
+                document.getElementById('name').value = p.name;
+                document.getElementById('description').value = p.description || '';
+                document.getElementById('price').value = p.price;
+                document.getElementById('oldPrice').value = p.oldPrice || '';
+                document.getElementById('category').value = p.category || '';
+                document.getElementById('imageUrl').value = (p.images && Array.isArray(p.images)) ? p.images.join(', ') : '';
+
+                document.querySelector('#productForm h2').innerHTML = '<i data-lucide="edit-3"></i> Edit Product';
+                document.querySelector('#productForm button[type="submit"] span').innerText = 'Update Product';
+                document.querySelector('#productForm button[type="submit"] i').setAttribute('data-lucide', 'refresh-cw');
+
+                // Add a cancel button if not present
+                if (!document.getElementById('cancelEdit')) {
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.id = 'cancelEdit';
+                    cancelBtn.innerHTML = '<i data-lucide="x-circle"></i> <span>Cancel Edit</span>';
+                    cancelBtn.type = 'button';
+                    cancelBtn.style.background = 'rgba(255,255,255,0.05)';
+                    cancelBtn.style.border = '1px solid var(--border)';
+                    cancelBtn.style.marginTop = '10px';
+                    cancelBtn.onclick = resetForm;
+                    document.getElementById('productForm').appendChild(cancelBtn);
+                }
+                initIcons();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                alert('Error fetching product details');
+            }
+        }
+
+        function resetForm() {
+            editingProductId = null;
+            document.getElementById('productForm').reset();
+            document.querySelector('#productForm h2').innerHTML = '<i data-lucide="plus-circle"></i> Add Product';
+            document.querySelector('#productForm button[type="submit"] span').innerText = 'Publish Product';
+            document.querySelector('#productForm button[type="submit"] i').setAttribute('data-lucide', 'send');
+            const cancelBtn = document.getElementById('cancelEdit');
+            if (cancelBtn) cancelBtn.remove();
+            initIcons();
         }
 
         document.getElementById('productForm').onsubmit = async (e) => {
@@ -239,20 +490,35 @@
                 featured: true
             };
 
-            await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(product)
-            });
+            const method = editingProductId ? 'PUT' : 'POST';
+            const url = editingProductId ? `${API_URL}/${editingProductId}` : API_URL;
 
-            e.target.reset();
-            fetchProducts();
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(product)
+                });
+
+                if (res.ok) {
+                    resetForm();
+                    fetchProducts();
+                } else {
+                    alert('Error saving product');
+                }
+            } catch (error) {
+                alert('Connection error');
+            }
         };
 
         async function deleteProduct(id) {
-            if (confirm('Are you sure?')) {
-                await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-                fetchProducts();
+            if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                    await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                    fetchProducts();
+                } catch (error) {
+                    alert('Error deleting product');
+                }
             }
         }
 
